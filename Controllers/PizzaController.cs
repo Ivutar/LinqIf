@@ -3,30 +3,21 @@ using Microsoft.AspNetCore.Mvc;
 namespace LinqIf.Controllers;
 
 [ApiController]
-[Route("[controller]")]
-public class WeatherForecastController : ControllerBase
+[Route("[controller]/[action]")]
+public class PizzaController : ControllerBase
 {
-    private static readonly string[] Summaries = new[]
-    {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
+    private readonly ILogger<PizzaController> _logger;
 
-    private readonly ILogger<WeatherForecastController> _logger;
-
-    public WeatherForecastController(ILogger<WeatherForecastController> logger)
+    public PizzaController(ILogger<PizzaController> logger, PizzaService pizzaService)
     {
         _logger = logger;
     }
 
-    [HttpGet(Name = "GetWeatherForecast")]
-    public IEnumerable<WeatherForecast> Get()
-    {
-        return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-        {
-            Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            TemperatureC = Random.Shared.Next(-20, 55),
-            Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-        })
-        .ToArray();
-    }
+    [HttpGet]
+    public async Task<IEnumerable<Pizza>> Get([FromServices] PizzaService pizzaService, PizzaRequest req)
+        => await pizzaService.Get();
+
+    [HttpGet]
+    public async Task<IEnumerable<Pizza>> GetEx([FromServices] PizzaService pizzaService, PizzaRequest req)
+        => await pizzaService.GetEx();
 }
