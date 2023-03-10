@@ -6,11 +6,6 @@ namespace LinqIf.Controllers;
 [Route("[controller]/[action]")]
 public class PizzaController : ControllerBase
 {
-    private readonly ILogger<PizzaController> _logger;
-
-    public PizzaController(ILogger<PizzaController> logger)
-        => _logger = logger;
-
     [HttpPost]
     public async Task<IEnumerable<Pizza>> Get([FromServices] PizzaService pizzaService, PizzaRequest req)
         => await pizzaService.Get(req);
