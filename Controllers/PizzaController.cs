@@ -8,16 +8,14 @@ public class PizzaController : ControllerBase
 {
     private readonly ILogger<PizzaController> _logger;
 
-    public PizzaController(ILogger<PizzaController> logger, PizzaService pizzaService)
-    {
-        _logger = logger;
-    }
+    public PizzaController(ILogger<PizzaController> logger)
+        => _logger = logger;
 
-    [HttpGet]
+    [HttpPost]
     public async Task<IEnumerable<Pizza>> Get([FromServices] PizzaService pizzaService, PizzaRequest req)
-        => await pizzaService.Get();
+        => await pizzaService.Get(req);
 
-    [HttpGet]
+    [HttpPost]
     public async Task<IEnumerable<Pizza>> GetEx([FromServices] PizzaService pizzaService, PizzaRequest req)
-        => await pizzaService.GetEx();
+        => await pizzaService.GetEx(req);
 }

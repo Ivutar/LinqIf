@@ -5,5 +5,4 @@ public class Pizza
     public int KCal { get; set; }
     public decimal Price { get; set; }
     public int Diameter { get; set; }
-    public IEnumerable<string> Ingridients { get; set; }
 }

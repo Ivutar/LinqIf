@@ -99,17 +99,34 @@ namespace System.Linq
         }
 
         /// <summary>
-        /// Применить к запросу парамтеры пагинации.
+        /// Вспомогательный метод для условного применения <see cref="Queryable.OrderBy{TSource, TKey}(IQueryable{TSource}, Expression{Func{TSource, TKey}})"/> в цепочке построения <see cref="IQueryable"/>.
         /// </summary>
-        /// <typeparam name="T"> Тип возвращаемого запросом значения. </typeparam>
-        /// <param name="query"> Исходный запрос. </param>
-        /// <param name="request"> Параметры запроса пагинации. </param>
-        /// <returns> Результирующий запрос. </returns>
-        //public static IQueryable<T> SetPagination<T>(this IQueryable<T> query, PaginationRequest request)
-        //{
-        //    return query
-        //        .SkipIfGreaterThanZero(request.Offset)
-        //        .TakeIfGreaterThanZero(request.Limit);
-        //}
+        /// <typeparam name="T">Тип элемента источника.</typeparam>
+        /// <typeparam name="TKey">Тип ключа, возвращаемого функцией</typeparam>
+        /// <param name="query">Запрос для применения фильтрации.</param>
+        /// <param name="condition">Условие применения фильтрации.</param>
+        /// <param name="predicate">Предикат фильтрации, который должен быть применен, только если <paramref name="condition"/> не равен false.</param>
+        /// <param name="desc">Направление сортировки. По умолчанию false - по убыванию.</param>
+        /// <returns>В зависимости от <paramref name="condition"/>, либо оригинальный запрос <paramref name="query"/>,
+        /// либо запрос с применением предиката сортировки <paramref name="predicate"/>.</returns>
+        public static IQueryable<T> OrderByIf<T, TKey>(this IQueryable<T> query, bool condition, Expression<Func<T, TKey>> predicate, bool desc = false)
+        {
+            if (condition)
+            {
+                //TODO: надо понимать что если нужно последовательно применить несколько сортировок, то нужно так же использовать ThenBy и ThenByDescending
+                //то есть серия запросов вида entities.OrderByIf(...).OrderByIf(...).OrderByIf(...) применит сортировку из ПОСЛЕДНЕГО вызова метода OrderByIf
+                if (desc)
+                {
+                    return query.OrderByDescending(predicate);
+                }
+                else
+                {
+                    return query.OrderBy(predicate);
+                }
+            }
+
+            return query;
+        }
+
     }
 }
