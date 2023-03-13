@@ -128,5 +128,16 @@ namespace System.Linq
             return query;
         }
 
+        //public static IQueryable<T> WhereIf<T>(
+        //    this IQueryable<T> query,
+        //    bool condition,
+        //    Expression<Func<T,bool>> predicate
+        //) => condition ? query.Where(predicate) : query;
+
+        //public static IEnumerable<T> WhereIf<T>(
+        //    this IEnumerable<T> source,
+        //    bool condition,
+        //    Func<T, bool> predicate
+        //) => condition ? source.Where(predicate) : source;
     }
 }
